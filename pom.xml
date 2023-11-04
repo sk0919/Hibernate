@@ -19,6 +19,20 @@
 	    <version>6.2.0.Final</version>
 	    <!--<type>pom</type>-->
 	</dependency>
+	
+	<!--changing the dependecy resolved this issue - The org.hibernate.UnknownEntityTypeException: Unable to locate persister -->
+	<!--<dependency>
+	  	<groupId>org.hibernate.javax.persistence</groupId>
+	 	 <artifactId>hibernate-jpa-2.1-api</artifactId>
+		<version>1.0.0.Final</version>
+	</dependency>-->
+	
+	<dependency>
+	    <groupId>jakarta.persistence</groupId>
+	    <artifactId>jakarta.persistence-api</artifactId>
+	    <version>3.1.0</version> <!-- Use the latest version here -->
+	</dependency>
+
 
   </dependencies>
 </project>
