@@ -19,19 +19,50 @@ public class ClientTest {
 	public static void main(String[] args) {
 		
 		try(Session session = HibernateUtil.getSessionFactory().openSession()) {
-			Employee employee = createEmployee();
-			session.beginTransaction();
-
-			//Serializable  serializable = (Serializable) session.save(employee);
-			Object  object =  session.save(employee);
-			Integer id = (Integer)object;
-			session.getTransaction().commit();
-
-			System.out.println("Employee is created with ID =" +id);
+			
+			int id = 2;
+			double newSalary = 74643;
+			//fetchById(session, id);
+			updateSalaryById(session, id, newSalary); //pros : update query will not be executed if no change in the data ,
+			
 		}catch (HibernateException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	private static void fetchById(Session session, int employeeId) {
+		
+		Employee employee = session.get(Employee.class, employeeId) ;
+		System.out.println(employee);
+		
+	}
+	
+	private static void updateSalaryById(Session session, int employeeId, double newSalary) {
+		Employee employee = session.get(Employee.class, employeeId) ;
+		
+		employee.setSalary(newSalary);
+		
+		session.beginTransaction();
+		session.saveOrUpdate(employee); //The method saveOrUpdate(Object) from the type Session is deprecated
+		session.getTransaction().commit();
+	}
+	
+//	public static void main(String[] args) {
+//		
+//		try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+//			Employee employee = createEmployee1();
+//			session.beginTransaction();
+//
+//			Object  object =  session.save(employee);
+//			Integer id = (Integer)object;
+//			session.getTransaction().commit();
+//
+//			System.out.println("Employee is created with ID =" +id);
+//		}catch (HibernateException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	/*
 	public static void main(String[] args) {
@@ -71,6 +102,15 @@ public class ClientTest {
 		employee.setEmployeeName("john doe");
 		employee.setEmail("john.doe@test.com");
 		employee.setSalary(80000.00);
+		employee.setDoj(new Date());
+		return employee;
+	}
+	
+	private static Employee createEmployee1(){
+		Employee employee= new Employee();
+		employee.setEmployeeName("jane doe");
+		employee.setEmail("jane.doe@test.com");
+		employee.setSalary(90000.00);
 		employee.setDoj(new Date());
 		return employee;
 	}
