@@ -3,6 +3,7 @@ package com.basic.entities;
 
 import java.util.Date;
 
+import org.hibernate.annotations.DynamicUpdate;
 
 /*
  *There might be some issues with your project dependencies. 
@@ -31,6 +32,7 @@ import jakarta.persistence.Id;
 
 @Entity
 @Table(name="employee_table")
+@DynamicUpdate
 public class Employee {
 	
 	@Id

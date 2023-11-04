@@ -20,10 +20,14 @@ public class ClientTest {
 		
 		try(Session session = HibernateUtil.getSessionFactory().openSession()) {
 			
-			int id = 2;
-			double newSalary = 74643;
+			int id = 4;
+			double newSalary = 75643;
 			//fetchById(session, id);
-			updateSalaryById(session, id, newSalary); //pros : update query will not be executed if no change in the data ,
+			//updateSalaryById(session, id, newSalary); //pros : update query will not be executed if no change in the data ,
+			
+			//createEmployee1(session);
+			deleteById(session, id);
+			
 			
 		}catch (HibernateException e) {
 			e.printStackTrace();
@@ -31,6 +35,39 @@ public class ClientTest {
 	}
 	
 	
+	/*
+	private static void deleteById(Session session, int employeeId) {
+		Employee employee = session.get(Employee.class, employeeId) ;
+		
+		session.beginTransaction();
+		
+		//session.delete(employee); // The method delete(Object) from the type Session is deprecated
+		session.remove(employee); // Use remove(Object) instead of delete(Object)
+		
+		session.getTransaction().commit();
+		
+	}
+	*/
+	
+	private static void deleteById(Session session, int employeeId) {
+		Employee employee = session.get(Employee.class, employeeId) ;
+		
+		if(employee != null) {
+			session.beginTransaction();
+			
+			//session.delete(employee); // The method delete(Object) from the type Session is deprecated
+			session.remove(employee); // Use remove(Object) instead of delete(Object)
+			
+			session.getTransaction().commit();
+		
+		}else {
+			System.err.println("Employee doesn't exist with id: "+employeeId);
+		}
+		
+		
+	}
+
+
 	private static void fetchById(Session session, int employeeId) {
 		
 		Employee employee = session.get(Employee.class, employeeId) ;
@@ -106,13 +143,23 @@ public class ClientTest {
 		return employee;
 	}
 	
-	private static Employee createEmployee1(){
+	private static void createEmployee1(Session session){
 		Employee employee= new Employee();
 		employee.setEmployeeName("jane doe");
 		employee.setEmail("jane.doe@test.com");
 		employee.setSalary(90000.00);
 		employee.setDoj(new Date());
-		return employee;
+		
+		
+		
+		session.beginTransaction();
+
+		Object  object =  session.save(employee);
+		Integer id = (Integer)object;
+		session.getTransaction().commit();
+
+		System.out.println("Employee is created with ID =" +id);
+		
 	}
 
 }
